@@ -1,16 +1,20 @@
+import Package
+
+
 class Bucket:
     def __init__(self, key, value):
         self.key = key
         self.value = value
 
+
 class HashMap:
-    def __init__(self, size = 40):
+    def __init__(self, size=40):
         self.packages = []
         for i in range(size):
             self.packages.append([])
 
     def get_hash(self, key):
-        return key % len(self.packages)
+        return key % 40
 
     def insert(self, key, value):
         hashkey = self.get_hash(key)
@@ -45,4 +49,7 @@ class HashMap:
                 self.packages[hashkey].pop(i)
                 return True
 
-
+    def print(self):
+        for package in self.packages:
+            if package is not None:
+                print(str(package))
