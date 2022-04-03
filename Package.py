@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 
 
+
 class Package:
     def __init__(self, id, address, city, state, zip, deadline, weight, notes):
         self.id = id
@@ -17,21 +18,36 @@ class Package:
         return "%s, %s, %s, %s, %s,%s, %s, %s" % (self.id, self.address, self.city, self.state, self.zip,
                                                           self.deadline, self.weight, self.notes)
 
+    def getID(self):
+        return self.id
 
-def fillMap(filename, hashmap):
-    with open(filename) as file:
-        reader = csv.reader(file, delimiter=',')
-        next(reader)
-        for package in reader:
-            id = int(package[0])
-            address = package[1]
-            city = package[2]
-            state = package[3]
-            zip = package[4]
-            deadline = package[5]
-            weight = package[6]
-            notes = package[7]
+    def getAddress(self):
+        return self.address
 
-            p = Package(id, address, city, state, zip, deadline, weight, notes)
-            hashmap.insert(p.id, p)
+    def getCity(self):
+        return self.city
+
+    def getState(self):
+        return self.state
+
+    def getZip(self):
+        return self.zip
+
+    def getDeadline(self):
+        return self.deadline
+
+    def getWeight(self):
+        return self.weight
+
+    def getNotes(self):
+        return self.notes
+
+    def setAddress(self, address):
+        self.address = address
+
+    def setCity(self, city):
+        self.city = city
+
+    def setZip(self, zip):
+        self.zip = zip
 

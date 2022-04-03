@@ -1,17 +1,25 @@
 from HashMap import *
 from Package import *
-
-
+from Distance import *
+from Truck import *
 
 class Main:
-    mp = HashMap()
-    filename = "WGUPS Package File.csv"
-    fillMap(filename, mp)
+    packMap = HashMap()
+    packFile = "WGUPS Package File.csv"
+    fillMap(packFile, packMap)
+
+    distFile = "WGUPS Distance Table.csv"
+    distArray = fillDist(distFile)
+
+    truck = Truck()
+    truck.loadTrucks(packMap.packages)
+
 
     print('Package Delivery System is now online')
-    print(mp.lookup(40))
 
-    print(3 % 40)
+
+    print(calcDistance(distArray, 7, 9))
+    print(packMap.lookup(4).getAddress())
 
 
 

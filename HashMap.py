@@ -1,3 +1,5 @@
+import csv
+
 import Package
 
 
@@ -53,3 +55,20 @@ class HashMap:
         for package in self.packages:
             if package is not None:
                 print(str(package))
+
+    def fillMap(filename, hashmap):
+        with open(filename, encoding='utf-8-sig') as file:
+            reader = csv.reader(file, delimiter=',')
+            next(reader)
+            for package in reader:
+                id = int(package[0])
+                address = package[1]
+                city = package[2]
+                state = package[3]
+                zip = package[4]
+                deadline = package[5]
+                weight = package[6]
+                notes = package[7]
+
+                p = Package(id, address, city, state, zip, deadline, weight, notes)
+                hashmap.insert(p.id, p)
