@@ -1,6 +1,3 @@
-import Package
-
-
 class Truck:
     truck1 = []
     truck2 = []
@@ -9,9 +6,9 @@ class Truck:
     def loadTrucks(self, packages):
 
         for p in packages:
-            address = p.getAddress()
-            deadline = p.getDeadline()
-            notes = p.getNotes()
+            address = p.get_address()
+            deadline = p.get_deadline()
+            notes = p.get_notes()
 
             if 'truck 2' in notes:
                 self.truck2.append(p)
@@ -20,11 +17,11 @@ class Truck:
             elif 'Delayed on flight' in notes:
                 self.truck3.append(p)
             elif 'Wrong address listed' in notes:
-                p.setAddress('410 S State St')
-                p.setZip('84111')
+                p.set_address('410 S State St')
+                p.set_zip('84111')
                 self.truck3.append(p)
-            elif deadline != 'EOD':
-                self.truck2.append(p)
+            # elif deadline != 'EOD':
+            #     self.truck2.append(p)
             else:
                 if len(self.truck1) < 16:
                     self.truck1.append(p)
@@ -34,3 +31,5 @@ class Truck:
                     self.truck3.append(p)
                 else:
                     print('You messed up! The trucks are full')
+
+        print("The trucks are loaded!")
