@@ -51,13 +51,21 @@ class Route:
             itinerary.append(speed_format)
         total_time = datetime.timedelta()
         for p in itinerary:
-            total_time += datetime.timedelta(self.time_to_sec(p))
+            total_time += self.get_delta_time(p)
             time_sum.append(total_time)
         return time_sum
 
-    def time_to_sec(self, time):
-        h, m, s = map(int, time.split(':'))
-        return h * 3600 + m * 60 + s
+    # def time_to_sec(self, time):
+    #     h, m, s = map(int, time.split(':'))
+    #     return h * 3600 + m * 60 + s
+
+    def get_delta_time(self, s):
+        try:
+            (h, m, s) = s.split(':')
+            dt = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+            return dt
+        except:
+            print("Error converting to Time Delta")
 
     def get_delivery_time(self, truck, truck_time, id):
         for i in truck:
@@ -67,14 +75,14 @@ class Route:
 
     def get_status(self, package, truck, time, name, id):
         delivery_time = self.get_delivery_time(truck, time, id)
-        timestamp = self.time_to_sec(package)
+        timestamp = self.get_delta_time(package)
         if name == 'truck1':
-            truck_time = self.time_to_sec('8:00:00')
+            truck_time = self.get_delta_time('8:00:00')
         if name == 'truck2':
-            truck_time = self.time_to_sec('10:00:00')
+            truck_time = self.get_delta_time('10:00:00')
         if name == 'truck3':
-            truck_time = self.time_to_sec('9:05:00')
-        if datetime.timedelta(timestamp) > delivery_time:
+            truck_time = self.get_delta_time('9:05:00')
+        if timestamp > delivery_time:
             return 'DELIVERED'
         if timestamp <= delivery_time:
             if timestamp < truck_time:

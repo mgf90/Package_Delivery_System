@@ -8,24 +8,42 @@ import re
 
 class main:
 
+    pack1 = [1, 6, 16, 20, 25, 29, 30, 31, 32, 33, 40]
+    pack2 = [3, 13, 14, 15, 17, 18, 19, 21, 34, 36, 37, 38, 39]
+    pack3 = [2, 4, 5, 7, 8, 9, 10, 11, 12, 22, 23, 24, 26, 27, 28, 35]
+
     map = HashMap()
+    truck = Truck()
+    # truck.loadTrucks(map.packages)
+
+    for i in pack1:
+        truck.load_truck1(i, map)
+
+    for i in pack2:
+        truck.load_truck2(i, map)
+
+    for i in pack3:
+        truck.load_truck3(i, map)
+
+    print("The trucks are loaded!")
+
     distance = Distance()
     route = Route(distance)
     dist_array = Distance.fill_dist(distance)
-    truck = Truck()
 
     print('Welcome to the Package Delivery System!\n')
 
-    truck.loadTrucks(map.packages)
     truck1 = route.organize(truck.truck1)
     truck2 = route.organize(truck.truck2)
     truck3 = route.organize(truck.truck3)
     all_trucks = truck1 + truck2 + truck3
 
+    print(truck1[0])
+
     # print(all_trucks[0])
 
     leave_time1 = ['8:00:00']
-    leave_time2 = ['10:00:00']
+    leave_time2 = ['8:00:00']
     leave_time3 = ['9:05:00']
 
     truck_time1 = route.truck_time(truck1, leave_time1)
@@ -64,11 +82,10 @@ class main:
 
             print('Please enter a time in HH:MM:SS format:')
             time = input()
-            sec_time = route.time_to_sec(time)
 
-            route.get_report("truck1", truck1, truck_time1, '', truck1_dist)
-            route.get_report("truck2", truck2, truck_time2, '', truck2_dist)
-            route.get_report("truck3", truck3, truck_time3, '', truck3_dist)
+            route.get_report("truck1", truck1, truck_time1, time, truck1_dist)
+            route.get_report("truck2", truck2, truck_time2, time, truck2_dist)
+            route.get_report("truck3", truck3, truck_time3, time, truck3_dist)
 
         elif (choice == '3'):
             print('Exiting....\nGoodbye!')

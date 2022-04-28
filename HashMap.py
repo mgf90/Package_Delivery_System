@@ -22,17 +22,17 @@ class HashMap:
     def add(self, key, package):
         self.packages[key] = package
 
-    def delete(self, id):
-        key = self.get_hash(id)
+    def delete(self, p_ID):
+        key = self.get_hash(p_ID)
         self.packages.remove(key)
 
-    def insert(self, id, address, city, state, zip, deadline, weight, status):
-        p = Package(id, address, city, state, zip, deadline, weight, status, '')
-        key = self.get_hash(id)
+    def insert(self, p_ID, address, city, state, zip, deadline, weight, status):
+        p = Package(p_ID, address, city, state, zip, deadline, weight, status, '')
+        key = self.get_hash(p_ID)
         self.packages[key] = p
 
-    def lookup(self, id):
-        key = self.get_hash(id)
+    def lookup(self, p_ID):
+        key = self.get_hash(p_ID)
         return self.packages[key]
 
     def parse_csv(self, path, file):

@@ -32,9 +32,10 @@ class Distance:
     def calc_total_distance(self, truck):
         sum = 0
         for p in truck:
+            num = self.get_location_num(p.get_address())
             if truck[0] == p:
                 n = 0
-            num = self.get_location_num(p.get_address())
+
             d = self.calc_distance(num, n)
             n = num
             sum += float(d)
