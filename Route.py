@@ -1,6 +1,4 @@
 import datetime
-
-from Package import *
 from Distance import *
 
 
@@ -9,32 +7,40 @@ class Route:
     def __init__(self, distance):
         self.d = distance
 
+    # Nearest neighbor algorithm
+    # Time: O(n)
+    # Space: O(n)
     def organize(self, truck):
 
+        # initializes the route list
         route = []
+
+        # sets the address to the hub
         prev = 0
 
         while len(truck) > 0:
-            weight = 50.0
-            existing_address = []
-            for a in route:
-                existing_address.append(a.get_address())
+            dist = 40
+
+            # loops through every package in the truck and finds the shortest distance
             for t in truck:
-                if t.get_address in existing_address:
-                    temp_package = t
-                else:
-                    new_location = self.d.get_location_num(t.get_address())
-                    p_miles = float(self.d.calc_distance(new_location, prev))
-                    if p_miles <= weight:
-                        weight = p_miles
-                        temp_package = t
-            route.append(temp_package)
-            prev = self.d.get_location_num(temp_package.get_address())
-            truck.remove(temp_package)
+                curr = self.d.get_location_num(t.get_address())
+                miles = float(self.d.calc_distance(curr, prev))
+                if miles <= dist:
+                    dist = miles
+                    p = t
+
+            # adds package to the route list and removes it from the truck
+            route.append(p)
+            prev = self.d.get_location_num(p.get_address())
+            truck.remove(p)
 
         return route
 
+    # Time: O(n)
+    # Space: O(n)
+    # Calculates delivery time for truck
     def truck_time(self, truck, start):
+
         time_sum = []
         itinerary = start
         dist = Distance()
@@ -55,33 +61,39 @@ class Route:
             time_sum.append(total_time)
         return time_sum
 
-    # def time_to_sec(self, time):
-    #     h, m, s = map(int, time.split(':'))
-    #     return h * 3600 + m * 60 + s
-
+    # Time: O(1)
+    # Space: O(1)
+    # Converts time to delta time
     def get_delta_time(self, s):
-        try:
-            (h, m, s) = s.split(':')
-            dt = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-            return dt
-        except:
-            print("Error converting to Time Delta")
 
-    def get_delivery_time(self, truck, truck_time, id):
+        (h, m, s) = s.split(':')
+        dt = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+
+        return dt
+
+
+    # Time: O(n)
+    # Space: O(n)
+    # Returns delivery time
+    def get_delivery_time(self, truck, time, id):
         for i in truck:
             if i.get_id() == id:
                 index = truck.index(i)
-        return truck_time[index + 1]
+        return time[index + 1]
 
+    # Time: O(1)
+    # Space: O(1)
+    # Gets delivery status of package
     def get_status(self, package, truck, time, name, id):
         delivery_time = self.get_delivery_time(truck, time, id)
         timestamp = self.get_delta_time(package)
-        if name == 'truck1':
+
+        if name == 'Truck 1':
             truck_time = self.get_delta_time('8:00:00')
-        if name == 'truck2':
+        if name == 'Truck 2':
+            truck_time = self.get_delta_time('8:00:00')
+        if name == 'Truck 3':
             truck_time = self.get_delta_time('10:00:00')
-        if name == 'truck3':
-            truck_time = self.get_delta_time('9:05:00')
         if timestamp > delivery_time:
             return 'DELIVERED'
         if timestamp <= delivery_time:
@@ -90,22 +102,22 @@ class Route:
             else:
                 return 'ON_TRUCK'
 
-    def get_report(self, name, truck, truck_timeline, time, distance):
-        print('\n{} || # of packages: {} || Total Distance: {} miles\n'.format(name, len(truck), distance))
-        if time == '':
-            timestamp = '23:00:00'
-        else:
-            timestamp = time
-        for t in truck:
-            i = truck.index(t)
-            id = t.get_id()
-            ds = self.get_status(timestamp, truck, truck_timeline, name, id)
-            s = 'ID: {:>2} -- Deadline: {:>6} -- Status: {:>6} -- Expected Delivery: {}'
-            formatted_string = s.format(id, t.get_deadline(), ds, truck_timeline[i + 1])
-            print(formatted_string)
+    # Time: O(n)
+    # Space: O(n)
+    # Prints full report of all packages
+    def get_report(self, truck, name, distance, itinerary, time):
 
-    # def get_status(self, seconds, truck):
-    #     for p in truck:
-    #         if seconds < p.get_
+        print(f'\n{len(truck)} packages on {name}. Distance travelled is {distance} miles.\n')
+
+        for p in truck:
+            i = truck.index(p)
+            id = p.get_id()
+            address = p.get_address()
+            deadline = p.get_deadline()
+            status = self.get_status(time, truck, itinerary, name, id)
+            report = f'Package ID: {id}   ||   Deadline: {deadline}   ||   Status: {status}   ||   Delivery Time: ' \
+                     f'{itinerary[i + 1]}   ||   Address: {address}'
+            print(report)
+
 
 

@@ -1,4 +1,5 @@
 class Package:
+    # constructor for Package object
     def __init__(self, id, address, city, state, zip, deadline, weight, status, notes):
         self.id = int(id)
         self.address = address
@@ -10,10 +11,12 @@ class Package:
         self.status = status
         self.notes = notes
 
+    # prints package info as a string
     def __str__(self):
         return "%s, %s, %s, %s, %s,%s, %s, %s" % (self.id, self.address, self.city, self.state, self.zip,
                                                   self.deadline, self.weight, self.notes)
 
+    # setters and getters for package info
     def get_id(self):
         return self.id
 
