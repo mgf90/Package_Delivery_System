@@ -1,6 +1,6 @@
 import csv
-
-import Package
+import os
+from Package import Package
 
 
 class Bucket:
@@ -8,67 +8,41 @@ class Bucket:
         self.key = key
         self.value = value
 
-
 class HashMap:
+    # constructor for HashMap object
     def __init__(self, size=40):
+        path = os.getcwd()
+        file = "/WGUPS Package File.csv"
         self.packages = []
         for i in range(size):
             self.packages.append([])
+        self.read_package_data(path, file)
 
+    # returns hash key
     def get_hash(self, key):
         return key % 40
 
-    def insert(self, key, value):
-        hashkey = self.get_hash(key)
-        kv = [key, value]
+    # inserts package into HashMap
+    def add(self, key, package):
+        self.packages[key] = package
 
-        if self.packages[hashkey] is None:
-            self.packages[hashkey] = list([kv])
-            return True
-        else:
-            for pair in self.packages[hashkey]:
-                if pair[0] == key:
-                    pair[1] == value
-                    return True
-            self.packages[hashkey].append(kv)
-            return True
+    # deletes package from HashMap
+    def delete(self, p_ID):
+        key = self.get_hash(p_ID)
+        self.packages.remove(key)
 
-    def lookup(self, key):
-        hashkey = self.get_hash(key)
-        if self.packages[hashkey] is not None:
-            for pair in self.packages[hashkey]:
-                if pair[0] == key:
-                    return pair[1]
-        return 'The package does not exist'
+    # searches HashMap for particular package
+    def search(self, p_ID):
+        key = self.get_hash(p_ID)
+        return self.packages[key]
 
-    def delete(self, key):
-        hashkey = self.get_hash(key)
-
-        if self.packages[hashkey] is None:
-            return False
-        for i in range(0, len(self.packages[hashkey])):
-            if self.packages[hashkey][i][0] == key:
-                self.packages[hashkey].pop(i)
-                return True
-
-    def print(self):
-        for package in self.packages:
-            if package is not None:
-                print(str(package))
-
-    def fillMap(filename, hashmap):
-        with open(filename, encoding='utf-8-sig') as file:
+    # Time: O(n)
+    # Space: O(n)
+    # reads data from csv file into HashMap
+    def read_package_data(self, path, file):
+        with open(path + file, encoding='utf-8-sig') as file:
             reader = csv.reader(file, delimiter=',')
-            next(reader)
-            for package in reader:
-                id = int(package[0])
-                address = package[1]
-                city = package[2]
-                state = package[3]
-                zip = package[4]
-                deadline = package[5]
-                weight = package[6]
-                notes = package[7]
-
-                p = Package(id, address, city, state, zip, deadline, weight, notes)
-                hashmap.insert(p.id, p)
+            for row in reader:
+                p = Package(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], "AT_HUB")
+                key = self.get_hash(p.get_id())
+                self.add(key, p)
